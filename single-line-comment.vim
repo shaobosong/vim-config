@@ -13,7 +13,7 @@ function! SingleLineComment(r0, r1, sign)
         if l:add_sign
             call setline(l:lnum, substitute(line, '^', a:sign, 'g'))
         else
-            call setline(l:lnum, substitute(line, '^\(\t*\s*\)*'.a:sign.'\(\t*\s*\)*', '', 'g'))
+            call setline(l:lnum, substitute(line, '^\(\t*\s*\)*'.a:sign, '', 'g'))
         endif
         let l:lnum = l:lnum + 1
     endfor
