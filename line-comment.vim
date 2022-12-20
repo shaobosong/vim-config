@@ -1,5 +1,5 @@
 " Line comment for any languages
-function! LineComment(r0, r1, sign, extra_sign, align)
+function! s:LineComment(r0, r1, sign, extra_sign, align)
     let l:add_sign = 0
     let l:indent = 999
     for l:lnr in range(line(a:r0), line(a:r1))
@@ -49,33 +49,33 @@ function! LineComment(r0, r1, sign, extra_sign, align)
     endfor
 endfunction
 
-function! SingleLineComment(sign)
-    call LineComment(".", ".", a:sign, ' ', &tabstop)
+function! s:SingleLineComment(sign)
+    call s:LineComment(".", ".", a:sign, ' ', &tabstop)
 endfunction
 
-function! MultiLineComment(sign)
-    call LineComment("'<", "'>", a:sign, ' ', &tabstop)
+function! s:MultiLineComment(sign)
+    call s:LineComment("'<", "'>", a:sign, ' ', &tabstop)
 endfunction
 
 " Examples
-augroup CConfig
+"  by typing <C-v><C-/>
+augroup LineCommentCConfig
     autocmd!
+    " C
     autocmd BufNewFile,BufRead,BufEnter *.c,*.h,*.c.inc setlocal filetype=c
-    "  by typing <C-v><C-/>
-    autocmd FileType c xnoremap  :<c-u>call MultiLineComment('//')<cr>
-    autocmd FileType c nnoremap  :call SingleLineComment('//')<cr>
-augroup END
-
-augroup VimConfig
-    autocmd!
+    autocmd FileType c xnoremap <silent>  :<c-u>call <sid>MultiLineComment('//')<cr>
+    autocmd FileType c nnoremap <silent>  :call <sid>SingleLineComment('//')<cr>
+    " Vim
     autocmd BufNewFile,BufRead,BufEnter *.vim,*.vimrc setlocal filetype=vim
-    autocmd FileType vim xnoremap  :<c-u>call MultiLineComment('"')<cr>
-    autocmd FileType vim nnoremap  :call SingleLineComment('"')<cr>
+    autocmd FileType vim xnoremap <silent>  :<c-u>call <sid>MultiLineComment('"')<cr>
+    autocmd FileType vim nnoremap <silent>  :call <sid>SingleLineComment('"')<cr>
+    " Bash
+    autocmd BufNewFile,BufRead,BufEnter *.sh setlocal filetype=sh
+    autocmd FileType sh xnoremap <silent>  :<c-u>call <sid>MultiLineComment('#')<cr>
+    autocmd FileType sh nnoremap <silent>  :call <sid>SingleLineComment('#')<cr>
+    " Makefile
+    autocmd BufNewFile,BufRead,BufEnter Makefile* setlocal filetype=make
+    autocmd FileType make xnoremap <silent>  :<c-u>call <sid>MultiLineComment('#')<cr>
+    autocmd FileType make nnoremap <silent>  :call <sid>SingleLineComment('#')<cr>
 augroup END
 
-augroup BashConfig
-    autocmd!
-    autocmd BufNewFile,BufRead,BufEnter *.sh setlocal filetype=sh
-    autocmd FileType sh xnoremap  :<c-u>call MultiLineComment('#')<cr>
-    autocmd FileType sh nnoremap  :call SingleLineComment('#')<cr>
-augroup END
